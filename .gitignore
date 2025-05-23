@@ -1,3 +1,6 @@
+.wwebjs_auth
+.wwebjs_cache
+
 # Dependencies
 node_modules/
 .pnp/

@@ -4,6 +4,7 @@ import { UserModel } from "../models/user.model.js";
 import { loginSchema } from "../schemas/auth.schema.js";
 import { IAuthResponse } from "../types/user.types.js";
 import { z } from "zod";
+import { registerSchema } from "@/schemas/registerSchema.js";
 
 export class AuthController {
   static async login(req: Request, res: Response) {
@@ -38,6 +39,7 @@ export class AuthController {
         token,
         user: {
           id: user.id,
+          name: user.name,
           email: user.email,
         },
       };
@@ -56,7 +58,7 @@ export class AuthController {
 
   static async register(req: Request, res: Response) {
     try {
-      const userData = loginSchema.parse(req.body);
+      const userData = registerSchema.parse(req.body);
 
       const existingUser = await UserModel.findByEmail(userData.email);
       if (existingUser) {
@@ -76,6 +78,7 @@ export class AuthController {
         token,
         user: {
           id: user.id,
+          name: user.name,
           email: user.email,
         },
       };

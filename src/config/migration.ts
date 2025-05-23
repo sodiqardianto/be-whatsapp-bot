@@ -18,10 +18,14 @@ async function runMigration() {
     );
     await connection.query(`USE ${process.env.DB_NAME}`);
 
-    // Create users table
+    // Drop table first
+    await connection.query(`DROP TABLE IF EXISTS users`);
+
+    // Then create table
     await connection.query(`
-      CREATE TABLE IF NOT EXISTS users (
+      CREATE TABLE users (
         id INT PRIMARY KEY AUTO_INCREMENT,
+        name VARCHAR(255) NOT NULL,
         email VARCHAR(255) NOT NULL UNIQUE,
         password VARCHAR(255) NOT NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

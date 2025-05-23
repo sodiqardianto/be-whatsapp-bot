@@ -14,8 +14,8 @@ export class UserModel {
   static async create(userData: IUserInput): Promise<IUser> {
     const hashedPassword = await bcrypt.hash(userData.password, 10);
     const [result] = await pool.execute(
-      "INSERT INTO users (email, password) VALUES (?, ?)",
-      [userData.email, hashedPassword]
+      "INSERT INTO users (name, email, password) VALUES (?, ?, ?)",
+      [userData.name, userData.email, hashedPassword]
     );
     const [rows] = await pool.execute<IUser[]>(
       "SELECT * FROM users WHERE id = ?",
