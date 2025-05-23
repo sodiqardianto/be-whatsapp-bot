@@ -34,6 +34,13 @@ export class AuthController {
         { expiresIn: "24h" }
       );
 
+      res.cookie("token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        maxAge: 24 * 60 * 60 * 1000,
+        sameSite: "strict",
+      });
+
       const response: IAuthResponse = {
         message: "Login successful",
         token,
@@ -91,6 +98,20 @@ export class AuthController {
           .json({ message: "Validation error", errors: error.errors });
       }
       console.error("Registration error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  }
+
+  static async logout(req: Request, res: Response) {
+    try {
+      res.clearCookie("token", {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+      });
+      res.json({ message: "Logged out successfully" });
+    } catch (error) {
+      console.error("Logout error:", error);
       res.status(500).json({ message: "Internal server error" });
     }
   }
